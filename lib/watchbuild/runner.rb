@@ -7,10 +7,6 @@ module WatchBuild
     # Uses the spaceship to create or download a provisioning profile
     # returns the path the newly created provisioning profile (in /tmp usually)
     def run
-      FastlaneCore::PrintTable.print_values(config: WatchBuild.config,
-                                            hide_keys: [],
-                                            title: "Summary for WatchBuild #{WatchBuild::VERSION}")
-
       # UI.message("Starting login with user '#{WatchBuild.config[:username]}'")
 
       ENV['FASTLANE_ITC_TEAM_ID'] = WatchBuild.config[:itc_team_id] if WatchBuild.config[:itc_team_id]
@@ -67,11 +63,12 @@ module WatchBuild
       url = "https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/#{@app.apple_id}/activity/ios/builds/#{build.train_version}/#{build.build_version}/details"
       # 'Successfully finished processing the build'
       if minutes > 0 # it's 0 minutes if there was no new build uploaded
-        message ='Successfully finished processing the build'
-        version = "#{build.train_version} (#{build.build_version})"
-        testflightAppUrl = "https://beta.itunes.apple.com/v1/app/#{@app.apple_id}"
-        system("fastlane appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" &")
       end
+
+      message ='Successfully finished processing the build'
+      version = "#{build.train_version} (#{build.build_version})"
+      testflightAppUrl = "https://beta.itunes.apple.com/v1/app/#{@app.apple_id}"
+      system("fastlane appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" &")
     end
 
     private
