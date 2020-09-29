@@ -78,6 +78,12 @@ module WatchBuild
         UI.important("App Store Connect #iosprocessingtime #{minutes} minutes")
       end
       UI.message(url)
+
+      message ='Successfully finished processing the build'
+      version = "#{build.train_version} (#{build.build_version})"
+      testflightAppUrl = "https://beta.itunes.apple.com/v1/app/#{@app.apple_id}"
+      system("fastlane appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" &")
+
     end
 
     private

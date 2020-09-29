@@ -6,8 +6,8 @@ require 'watchbuild/version'
 Gem::Specification.new do |spec|
   spec.name          = 'watchbuild'
   spec.version       = WatchBuild::VERSION
-  spec.authors       = ['Felix Krause']
-  spec.email         = ['watchbuild@krausefx.com']
+  spec.authors       = ['Felix Krause', 'Peter Nyako']
+  spec.email         = ['watchbuild@krausefx.com', 'pnyako@gmail.com']
   spec.summary       = WatchBuild::DESCRIPTION
   spec.description   = WatchBuild::DESCRIPTION
   spec.homepage      = 'https://fastlane.tools'
