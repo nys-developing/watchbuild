@@ -65,10 +65,12 @@ module WatchBuild
       if minutes > 0 # it's 0 minutes if there was no new build uploaded
       end
 
+      envPostfix = ENV['FASTLANE_ENV_POSTFIX']
+
       message ='Successfully finished processing the build'
       version = "#{build.train_version} (#{build.build_version})"
       testflightAppUrl = "https://beta.itunes.apple.com/v1/app/#{@app.apple_id}"
-      system("bundle exec fastlane appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" &")
+      system("bundle exec fastlane ios appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" #{envPostfix} &")
     end
 
     private
