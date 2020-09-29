@@ -11,14 +11,14 @@ module WatchBuild
                                             hide_keys: [],
                                             title: "Summary for WatchBuild #{WatchBuild::VERSION}")
 
-      UI.message("Starting login with user '#{WatchBuild.config[:username]}'")
+      # UI.message("Starting login with user '#{WatchBuild.config[:username]}'")
 
       ENV['FASTLANE_ITC_TEAM_ID'] = WatchBuild.config[:itc_team_id] if WatchBuild.config[:itc_team_id]
       ENV['FASTLANE_ITC_TEAM_NAME'] = WatchBuild.config[:itc_team_name] if WatchBuild.config[:itc_team_name]
 
       Spaceship::Tunes.login(WatchBuild.config[:username], nil)
       Spaceship::Tunes.select_team
-      UI.message('Successfully logged in')
+      # UI.message('Successfully logged in')
 
       start = Time.now
       build = wait_for_build(start)
@@ -44,7 +44,7 @@ module WatchBuild
             time_elapsed = Time.at(seconds_elapsed).utc.strftime '%H:%M:%S hours'
           end
 
-          UI.message("Waiting #{time_elapsed} for App Store Connect to process the build #{build.train_version} (#{build.build_version})... this might take a while...")
+          # UI.message("Waiting #{time_elapsed} for App Store Connect to process the build #{build.train_version} (#{build.build_version})... this might take a while...")
         rescue => ex
           UI.error(ex)
           UI.message('Something failed... trying again to recover')
@@ -59,31 +59,19 @@ module WatchBuild
     end
 
     def notification(build, minutes)
-      require 'terminal-notifier'
-
       if build.nil?
-        UI.message 'Application build is still processing'
+         # 'Application build is still processing'
         return
       end
 
       url = "https://appstoreconnect.apple.com/WebObjects/iTunesConnect.woa/ra/ng/app/#{@app.apple_id}/activity/ios/builds/#{build.train_version}/#{build.build_version}/details"
-      TerminalNotifier.notify('Build finished processing',
-                              title: build.app_name,
-                              subtitle: "#{build.train_version} (#{build.build_version})",
-                              execute: "open '#{url}'")
-
-      UI.success('Successfully finished processing the build')
+      # 'Successfully finished processing the build'
       if minutes > 0 # it's 0 minutes if there was no new build uploaded
-        UI.message('You can now tweet: ')
-        UI.important("App Store Connect #iosprocessingtime #{minutes} minutes")
+        message ='Successfully finished processing the build'
+        version = "#{build.train_version} (#{build.build_version})"
+        testflightAppUrl = "https://beta.itunes.apple.com/v1/app/#{@app.apple_id}"
+        system("fastlane appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" &")
       end
-      UI.message(url)
-
-      message ='Successfully finished processing the build'
-      version = "#{build.train_version} (#{build.build_version})"
-      testflightAppUrl = "https://beta.itunes.apple.com/v1/app/#{@app.apple_id}"
-      system("fastlane appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" &")
-
     end
 
     private
