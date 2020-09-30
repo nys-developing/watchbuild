@@ -8,6 +8,12 @@ module WatchBuild
       user ||= CredentialsManager::AppfileConfig.try_fetch_value(:apple_id)
 
       [
+        FastlaneCore::ConfigItem.new(key: :password,
+                                     short_option: '-p',
+                                     env_name: 'FASTLANE_PASSWORD',
+                                     description: 'The password for apple id',
+                                     code_gen_sensitive: true,
+                                     default_value: ""),
         FastlaneCore::ConfigItem.new(key: :app_identifier,
                                      short_option: '-a',
                                      env_name: 'APP_IDENTIFIER',

@@ -12,7 +12,7 @@ module WatchBuild
       ENV['FASTLANE_ITC_TEAM_ID'] = WatchBuild.config[:itc_team_id] if WatchBuild.config[:itc_team_id]
       ENV['FASTLANE_ITC_TEAM_NAME'] = WatchBuild.config[:itc_team_name] if WatchBuild.config[:itc_team_name]
 
-      Spaceship::Tunes.login(WatchBuild.config[:username], nil)
+      Spaceship::Tunes.login(WatchBuild.config[:username], WatchBuild.config[:password])
       Spaceship::Tunes.select_team
       # UI.message('Successfully logged in')
 
@@ -40,7 +40,7 @@ module WatchBuild
             time_elapsed = Time.at(seconds_elapsed).utc.strftime '%H:%M:%S hours'
           end
 
-          # UI.message("Waiting #{time_elapsed} for App Store Connect to process the build #{build.train_version} (#{build.build_version})... this might take a while...")
+          UI.message("[#{build.app_name}] Waiting #{time_elapsed} for App Store Connect to process the build #{build.train_version} (#{build.build_version})...")
         rescue => ex
           UI.error(ex)
           UI.message('Something failed... trying again to recover')
