@@ -72,6 +72,7 @@ module WatchBuild
       version = "#{build.train_version} (#{build.build_version})"
       testflightAppUrl = "https://beta.itunes.apple.com/v1/app/#{@app.apple_id}"
       system("bundle exec fastlane ios appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" #{envPostfix}")
+      system("osascript -e 'tell application \"Terminal\" to close first window' & exit")
     end
 
     private

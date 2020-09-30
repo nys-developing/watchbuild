@@ -16,7 +16,7 @@ class WatchBuildApplication
     program :name, 'watchbuild'
     program :version, WatchBuild::VERSION
     program :description, WatchBuild::DESCRIPTION
-    program :help, 'Author', 'Felix Krause <watchbuild@krausefx.com>'
+    program :help, 'Author', 'Felix Krause <watchbuild@krausefx.com> & Peter Nyako <pnyako@gmail.com>'
     program :help, 'Website', 'https://fastlane.tools'
     program :help, 'GitHub', 'https://github.com/fastlane/watchbuild'
     program :help_formatter, :compact
