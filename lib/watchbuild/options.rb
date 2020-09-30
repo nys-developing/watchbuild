@@ -9,7 +9,7 @@ module WatchBuild
 
       [
         FastlaneCore::ConfigItem.new(key: :password,
-                                     short_option: '-p',
+                                     short_option: '-s',
                                      env_name: 'FASTLANE_PASSWORD',
                                      description: 'The password for apple id',
                                      code_gen_sensitive: true,

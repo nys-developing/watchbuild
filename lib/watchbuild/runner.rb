@@ -11,6 +11,7 @@ module WatchBuild
 
       ENV['FASTLANE_ITC_TEAM_ID'] = WatchBuild.config[:itc_team_id] if WatchBuild.config[:itc_team_id]
       ENV['FASTLANE_ITC_TEAM_NAME'] = WatchBuild.config[:itc_team_name] if WatchBuild.config[:itc_team_name]
+      ENV['FASTLANE_PASSWORD'] = WatchBuild.config[:password] if WatchBuild.config[:password]
 
       Spaceship::Tunes.login(WatchBuild.config[:username], WatchBuild.config[:password])
       Spaceship::Tunes.select_team
@@ -70,7 +71,7 @@ module WatchBuild
       message ='Successfully finished processing the build'
       version = "#{build.train_version} (#{build.build_version})"
       testflightAppUrl = "https://beta.itunes.apple.com/v1/app/#{@app.apple_id}"
-      system("bundle exec fastlane ios appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" #{envPostfix} &")
+      system("bundle exec fastlane ios appstore_notification message:\"#{message}\" iosprocessingtime:\"#{minutes}\" app_name:\"#{build.app_name}\" url:\"#{testflightAppUrl}\" version:\"#{version}\" icon_url:\"#{build.icon_url}\" #{envPostfix}")
     end
 
     private
