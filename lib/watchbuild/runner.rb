@@ -13,22 +13,24 @@ module WatchBuild
       ENV['FASTLANE_ITC_TEAM_NAME'] = WatchBuild.config[:itc_team_name] if WatchBuild.config[:itc_team_name]
       ENV['FASTLANE_PASSWORD'] = WatchBuild.config[:password] if WatchBuild.config[:password]
 
+      build_number = WatchBuild.config[:build_number]
+
       Spaceship::Tunes.login(WatchBuild.config[:username], WatchBuild.config[:password])
       Spaceship::Tunes.select_team
-      # UI.message('Successfully logged in')
+      UI.message('Successfully logged in')
 
       start = Time.now
-      build = wait_for_build(start)
+      build = wait_for_build(start, build_number)
       minutes = ((Time.now - start) / 60).round
       notification(build, minutes)
     end
 
-    def wait_for_build(start_time)
+    def wait_for_build(start_time, build_number)
       UI.user_error!("Could not find app with app identifier #{WatchBuild.config[:app_identifier]}") unless app
 
       loop do
         begin
-          build = find_build
+          build = find_build(build_number)
           return build if build.processing == false
 
           seconds_elapsed = (Time.now - start_time).to_i.abs
@@ -81,10 +83,10 @@ module WatchBuild
       @app ||= Spaceship::Application.find(WatchBuild.config[:app_identifier])
     end
 
-    def find_build
+    def find_build(build_number)
       build = nil
       app.latest_version.candidate_builds.each do |b|
-        build = b if !build || b.upload_date > build.upload_date
+        build = b if (!build || b.upload_date > build.upload_date) && b.build_version == build_number
       end
 
       unless build
