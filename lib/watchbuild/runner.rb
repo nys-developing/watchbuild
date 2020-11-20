@@ -15,8 +15,8 @@ module WatchBuild
 
       build_number = WatchBuild.config[:build_number]
 
-      Spaceship::Tunes.login(WatchBuild.config[:username], WatchBuild.config[:password])
-      Spaceship::Tunes.select_team
+      Spaceship::ConnectAPI.login(WatchBuild.config[:username], WatchBuild.config[:password])
+      Spaceship::ConnectAPI.select_team
       UI.message('Successfully logged in')
 
       start = Time.now
@@ -84,16 +84,24 @@ module WatchBuild
     end
 
     def find_build(build_number)
-      build = nil
-      app.latest_version.candidate_builds.each do |b|
-        build = b if (!build || b.upload_date > build.upload_date) && b.build_version == build_number
+      observed_build = nil
+
+      last_version = app.build_trains.values.last
+
+      last_version.each do |build|
+          # puts "====================================="
+          # puts "#Build id: #{build.bundle_id}"
+          # puts "#Version: #{build.train_version}"
+          # puts "#Build number: #{build.build_version}"
+          # puts "#Crash count: #{build.crash_count}"
+          observed_build = build if (!observed_build || build.upload_date > observed_build.upload_date) && build.build_version == build_number
       end
 
-      unless build
+      unless observed_build
         UI.user_error!("No processing builds available for app #{WatchBuild.config[:app_identifier]}")
       end
 
-      build
+      observed_build
     end
   end
 end
